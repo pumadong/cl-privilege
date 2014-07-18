@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cl.privilege.mapper.RoleModuleMapper" >
+  <resultMap id="BaseResultMap" type="com.cl.privilege.model.RoleModule" >
+    <result column="role_id" property="roleId" jdbcType="INTEGER" />
+    <result column="module_id" property="moduleId" jdbcType="INTEGER" />
+  </resultMap>
+  <insert id="insert" parameterType="com.cl.privilege.model.RoleModule" >
+    insert into p_role_module (role_id, module_id)
+    values (#{roleId,jdbcType=INTEGER}, #{moduleId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cl.privilege.model.RoleModule" >
+    insert into p_role_module
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="moduleId != null" >
+        module_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="moduleId != null" >
+        #{moduleId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:jee="http://www.springframework.org/schema/jee"
+    xmlns:tx="http://www.springframework.org/schema/tx" 
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:task="http://www.springframework.org/schema/task" 
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:cache="http://www.springframework.org/schema/cache"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
+    http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+    http://www.springframework.org/schema/jee  http://www.springframework.org/schema/jee/spring-jee-4.0.xsd
+    http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-4.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd"
+    default-lazy-init="true">
+
+	<description>Spring公共配置</description>
+
+	<!--开启注解 -->
+	<context:annotation-config />
+	
+	<!-- 开启自动切面代理 -->
+	<aop:aspectj-autoproxy />
+	
+	<context:component-scan base-package="com.cl">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<!-- 开启注解事务支持 -->	
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		 <property name="dataSource" ref="dataSourcePrivilegeCorba"/>
+	</bean>	
+	
+	<!-- 定义受环境影响易变的变量 -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<list>
+				<!-- 标准配置 -->
+				<value>classpath*:/config.properties</value>		
+				<!-- 本地开发环境配置 -->
+				<value>file:/d:/conf/*.properties</value>
+				<!-- 服务器生产环境配置 -->
+                <value>file:/etc/conf/*.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 通过BeanFactoryAware，手动从spring容器获取bean -->
+    <bean class="com.cl.privilege.utils.SpringContextHolder"  lazy-init="false" />
+	
+	<bean id="sqlSessionFactoryPrivilegeCorba" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSourcePrivilegeCorba" />
+	</bean>
+	<!-- 会自动将basePackage中配置的包路径下的所有带有@Mapper标注的接口生成代理类，实现数据访问 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactory" ref="sqlSessionFactoryPrivilegeCorba" />
+		<property name="basePackage" value="com/cl/privilege/mapper" />
+	</bean>
+	
+	<beans profile="production">
+		<bean id="dataSourcePrivilegeCorba" class="org.springframework.jndi.JndiObjectFactoryBean">
+			<property name="jndiName" value="java:/MySqlDS_JDBC" />
+		</bean>
+	</beans>
+    <beans profile="dev">
+	    <bean id="dataSourcePrivilegeCorba" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		    <property name="url" value="jdbc:mysql://localhost:3306/privilege?characterEncoding=utf-8"/>
+		    <property name="username" value="root"/>
+		    <property name="password" value="123456"/>
+	    </bean>
+    </beans>
+    
+</beans>
