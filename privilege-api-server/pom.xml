@@ -20,7 +20,7 @@
 		<!-- Cl -->
 		<dependency>
 			<groupId>cl</groupId>
-			<artifactId>privilege-core</artifactId>
+			<artifactId>privilege-data</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 		<!-- CAS Client -->

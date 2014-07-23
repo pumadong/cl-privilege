@@ -22,7 +22,7 @@
 	<context-param>  
 		<param-name>spring.profiles.default</param-name>  
 		<param-value>dev</param-value>  
-	 </context-param> 
+	</context-param> 
 	
 	<!-- 解决中文乱码问题 -->
 	<filter>
@@ -42,7 +42,14 @@
 		<url-pattern>*.do</url-pattern>
 	</filter-mapping>
 
-	
+<servlet>
+	<servlet-name>index</servlet-name>
+	<jsp-file>/index.jsp</jsp-file>
+</servlet>
+<servlet-mapping>   
+    <servlet-name> index </servlet-name>   
+    <url-pattern>/index</url-pattern>   
+</servlet-mapping>  
 	<!-- 加载Spring容器配置 -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -58,6 +65,4 @@
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
 	<distributable />
-	
-	<bean class="com.cl.test.Test"/>
 </web-app>

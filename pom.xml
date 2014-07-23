@@ -8,7 +8,8 @@
 	<url>http://maven.apache.org</url>
   
 	<modules>
-		<module>privilege-core</module>
+		<module>privilege-model</module>
+		<module>privilege-data</module>
 		<module>privilege-api</module>
 		<module>privilege-server</module>
 		<module>privilege-api-server</module>
