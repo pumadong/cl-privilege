@@ -3,10 +3,10 @@
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	id="WebApp_ID" version="2.5">
-	<display-name>Cl Privilege Manage</display-name>
+	<display-name>Cl Privilege Manage App Server</display-name>
 	<context-param>
 		<param-name>webAppRootKey</param-name>
-		<param-value>privilege.root</param-value>
+		<param-value>privilege-api-server.root</param-value>
 	</context-param>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
@@ -42,18 +42,21 @@
 		<url-pattern>*.do</url-pattern>
 	</filter-mapping>
 
-<servlet>
-	<servlet-name>index</servlet-name>
-	<jsp-file>/index.jsp</jsp-file>
-</servlet>
-<servlet-mapping>   
-    <servlet-name> index </servlet-name>   
-    <url-pattern>/index</url-pattern>   
-</servlet-mapping>  
 	<!-- 加载Spring容器配置 -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+	
+	<!-- 用dubbo提供hessian服务 -->
+	<servlet>
+        <servlet-name>dubbo</servlet-name>
+        <servlet-class>com.alibaba.dubbo.remoting.http.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dubbo</servlet-name>
+        <url-pattern>/hessian/*</url-pattern>
+    </servlet-mapping>
 	
 	<mime-mapping>
 		<extension>csv</extension>

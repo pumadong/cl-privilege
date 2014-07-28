@@ -122,7 +122,7 @@
       </if>
       <if test="updateDate != null" >
         update_date = #{updateDate,jdbcType=TIMESTAMP},
-      </if>
+      </if>      
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -138,4 +138,37 @@
       update_date = #{updateDate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+<!-- 以上是为了节约开发时间，使用MyBatisGenerator生成的代码-->
+<!-- 以下是针对不足功能，添加的代码  -->
+  
+  <select id="getModuleList" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from p_module
+  </select>
+  <select id="getModuleListByFlag" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+    from p_module
+    where falg = #{flag,jdbcType=VARCHAR}
+  </select>
+    <select id="getModuleListByRoleId" resultMap="BaseResultMap">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from p_module m
+        inner join p_role_module arm
+		on m.id=arm.module_id
+		where arm.role_id=#{roleId}
+    </select>
+    <select id="getModuleListByUserId" resultMap="BaseResultMap">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from p_module m
+        inner join p_role_module arm
+		on m.id=arm.module_id
+		inner join p_user_role aur
+		on arm.role_id=aur.role_id
+		where aur.user_id=#{userId}
+    </select>   
 </mapper>

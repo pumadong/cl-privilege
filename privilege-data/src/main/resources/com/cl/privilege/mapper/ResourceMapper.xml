@@ -155,7 +155,7 @@
       </if>
       <if test="updateDate != null" >
         update_date = #{updateDate,jdbcType=TIMESTAMP},
-      </if>
+      </if>      
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -174,4 +174,49 @@
       update_date = #{updateDate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+<!-- 以上是为了节约开发时间，使用MyBatisGenerator生成的代码-->
+<!-- 以下是针对不足功能，添加的代码  -->
+  
+	<select id="getResourceList" resultMap="BaseResultMap">
+		select 
+		<include refid="Base_Column_List" />
+		from p_resource
+	</select>
+    <select id="getResourceListByModuleFlag" parameterType="java.lang.String" resultMap="BaseResultMap">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from p_resource re
+    	<if test="userId != null and userId != ''">
+    		inner join p_role_resource arr 
+			on re.id=arr.resource_id
+			inner join p_user_role aur
+			on arr.role_id=aur.role_id 
+    	</if>
+    	where
+    	re.module_flag in
+    	<foreach collection="moduleFlags" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		<if test="userId != null and userId != ''">
+			and aur.user_id=#{userId}
+		</if>
+    </select>
+    <select id="isUsedByRole" parameterType="java.lang.String" resultType="java.lang.Boolean">
+    	select exists(select 1 from p_role_resource arr where arr.resource_id=#{resourceId} limit 1);
+    </select>
+    <select id="getResourceListByRoleId" parameterType="java.lang.String" resultMap="BaseResultMap">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from p_resource re
+    	inner join authority_role_resource arr 
+		on re.id=arr.resource_id 
+		where arr.role_id=#{roleId} 
+    </select>
+    <select id="getResourceListByParentId" parameterType="java.lang.String" resultMap="BaseResultMap">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from p_resource re
+		where re.parent_id=#{roleId} 
+    </select>
 </mapper>

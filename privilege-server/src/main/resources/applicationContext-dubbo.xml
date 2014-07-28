@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	 http://code.alibabatech.com/schema/dubbo	http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+       default-lazy-init="true">
+
+    <description>Dubbo provider配置</description>
+
+	<dubbo:consumer check="false" />
+
+    <!-- 提供方应用信息，用于计算依赖关系 -->
+    <dubbo:application name="privilege-server-center"/>
+
+    <!-- 使用zookeeper注册中心暴露服务地址 -->
+    <!-- 注册到这里 -->
+	<dubbo:registry protocol="zookeeper" address="${dubbo.registry.address}" id="zookeeperService" />
+	<!-- 到这里调用 -->
+	<dubbo:registry protocol="zookeeper" address="${dubbo.registry.address.client}" id="zookeeperClient" />
+
+    <!-- 调用dubbo接口 -->
+    <dubbo:reference id="privilegeBaseApiService" interface="com.cl.privilege.api.IPrivilegeBaseApiService"
+                     check="false" version="1.0" url="" registry="zookeeperClient"  protocol="dubbo" timeout="15000"/>
+</beans>

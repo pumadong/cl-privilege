@@ -7,7 +7,7 @@
 		</layout>
 	</appender>
 	<appender name="dailyRolling" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="/data/applogs/privilege/privilege.log" />
+		<param name="File" value="/data/applogs/privilege-api-server/privilege.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%-d{yyyy-MM-dd HH\:mm\:ss} %-5p 
 		[%t] [%c] - %m%n" />

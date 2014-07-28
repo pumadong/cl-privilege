@@ -1,6 +1,11 @@
 package com.cl.privilege.model;
 
-public class RoleResource {
+import java.io.Serializable;
+
+public class RoleResource implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	
     private Integer roleId;
 
     private Integer resourceId;

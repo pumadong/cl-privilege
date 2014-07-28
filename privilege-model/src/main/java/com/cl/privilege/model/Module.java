@@ -1,8 +1,12 @@
 package com.cl.privilege.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Module {
+public class Module implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	
     private Integer id;
 
     private String name;

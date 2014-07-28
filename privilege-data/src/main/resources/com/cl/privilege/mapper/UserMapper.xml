@@ -185,4 +185,51 @@
       update_date = #{updateDate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+<!-- 以上是为了节约开发时间，使用MyBatisGenerator生成的代码-->
+<!-- 以下是针对不足功能，添加的代码  -->
+
+    <!-- 这里演示了用两种方法连接字符串 -->
+    <sql id="where">
+    	where p_user.is_delete=0
+    	<if test="username!=null and username!=''">
+    		and p_user.username like '${username}%' 
+    	</if>
+    	<if test="fullname!=null and fullname!=''">
+    		and p_user.fullname like CONCAT(#{fullname},'%') 
+    	</if>
+    </sql>
+    <sql id="orderby">
+    	order by p_user.update_date desc 
+    </sql>
+	<select id="getUserByUsername" resultMap="BaseResultMap" parameterType="java.lang.String" >
+		select 
+		<include refid="Base_Column_List" />
+		from p_user
+		where username = #{username,jdbcType=VARCHAR}
+	</select>    
+    <select id="getUserTotalBySearch" parameterType="com.cl.privilege.model.UserSearchModel" resultType="java.lang.Integer">
+    	select count(0) 
+    	from p_user
+    	<include refid="where"/>
+    </select>
+    <!-- 这个方法虽然没有显示的书写limit，但是也是分页的，利用的MyBatis的RowBounds -->
+    <select id="getUserListBySearch" parameterType="com.cl.privilege.model.UserSearchModel" resultMap="BaseResultMap">
+        select 
+	    <include refid="Base_Column_List" />
+	    from p_user
+        <include refid="where"/>
+        <include refid="orderby"/>
+    </select>
+	<delete id="deleteUserRoleById" parameterType="java.lang.Integer">
+		delete from p_user_role where user_id=#{id};
+	</delete>
+	<insert id="assignRoles">
+	    insert into p_user_role(user_id,role_id)
+		values
+   		<foreach collection="roleIds" index="index" item="item" open="" separator="," close="">
+			(#{userId},#{item})
+		</foreach>
+		;
+    </insert> 	 
 </mapper>

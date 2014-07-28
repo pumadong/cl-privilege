@@ -114,4 +114,75 @@
       update_date = #{updateDate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+<!-- 以上是为了节约开发时间，使用MyBatisGenerator生成的代码-->
+<!-- 以下是针对不足功能，添加的代码  -->
+  
+    <sql id="where">
+    	<trim prefix="WHERE" prefixOverrides="AND">
+    	<if test="name!=null and name!=''">
+    		and r.name like CONCAT(#{name},'%') 
+    	</if>
+    	</trim>
+    </sql>
+    <sql id="orderby">
+    	order by r.update_date desc 
+    </sql>
+	<delete id="deleteRoleById" parameterType="java.lang.Integer">
+		delete r,arm,arr 
+		from authority_role r 
+		left join p_role_module prm on r.id=prm.role_id
+		left join p_role_resource prr on r.id=prr.role_id
+		where r.id=#{id};
+	</delete>
+	<delete id="deleteRoleModuleById" parameterType="java.lang.Integer">
+		delete from p_role_module where role_id=#{roleId};
+	</delete>
+	<delete id="deleteRoleResourceById" parameterType="java.lang.Integer">
+		delete from p_role_resource where role_id=#{roleId};
+	</delete>    
+    <select id="getRoleTotalBySearch" parameterType="com.cl.privilege.model.RoleSearchModel" resultType="java.lang.Integer">
+    	select count(0) 
+    	from p_role r
+    	<include refid="where"/>
+    </select>
+    <!-- 这个方法虽然没有显示的书写limit，但是也是分页的，利用的MyBatis的RowBounds -->
+    <select id="getRoleListBySearch" parameterType="com.cl.privilege.model.RoleSearchModel" resultMap="BaseResultMap">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from p_role r
+        <include refid="where"/>
+        <include refid="orderby"/>
+    </select>
+    <select id="isUsedByUser" parameterType="java.lang.Integer" resultType="java.lang.Boolean">
+    	select exists(select 1 from p_user_role pur where pur.role_id=#{roleId} limit 1);
+    </select>
+    <insert id="assignModules">
+	    insert into p_role_module(role_id,module_id)
+		values
+   		<foreach collection="moduleIds" index="index" item="item" open="" separator="," close="">
+			(#{roleId},#{item})
+		</foreach>
+		;		
+    </insert>
+    <insert id="assignResources">
+	    insert into p_role_resource(role_id,resource_id)
+		values
+   		<foreach collection="resourceIds" index="index" item="item" open="" separator="," close="">
+			(#{roleId},#{item})
+		</foreach>
+		;		
+    </insert>
+    <select id="getRoleListByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from p_role r
+        inner join p_user_role pur on r.id=pur.role_id
+        where pur.user_id=#{userId}
+    </select> 
+    <select id="getRoleList" resultMap="BaseResultMap">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from p_role r
+    </select>     
 </mapper>
