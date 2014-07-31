@@ -8,4 +8,6 @@ public class ConstantUtil {
 
 	public static final String Exists = "exists";
 	
+	public static final String EmptyJsonObject = "{}";
+	
 }

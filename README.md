@@ -46,4 +46,14 @@ http://jadethao.iteye.com/blog/1726115
 
 如果商用的话，这套模板是需要购买的，25美元。
 
-因为MetroNic的assets目录中都是的静态资源文件，我没有把它放入权限相关项目，而是单独配置了一个Nginx访问地址：http://127.0.0.1/assets/
+因为MetroNic的assets目录中都是的静态资源文件，我没有把它放入权限相关项目，而是单独配置了一个Nginx访问地址：http://127.0.0.1/privilege_inc/assets/
+
+assets的内容，可以到这里下载：http://pan.baidu.com/s/1qW98L0C
+
+由于我们另配了assets地址，所以一些文件里面对于资源文件的地址要从相对路径改为绝对路径，比如：
+assets/scripts/core/app.js
+
+六、Jquery插件
+
+jsTree 	:	http://www.jstree.com/
+jquery.validate 	:	http://bassistance.de/jquery-plugins/jquery-plugin-validation

@@ -31,7 +31,7 @@ public class PrivilegeBaseApiServiceImpl implements IPrivilegeBaseApiService {
 	}
 
 	@Override
-	public String getModuleTree(Integer userId,String moduleFlag,String visitedStructure)
+	public String getModuleTree(Integer userId,String visitedModule,String visitedResource)
 	{
 		User user = userMapper.selectByPrimaryKey(userId);
 		if(user == null)	return "";
@@ -67,7 +67,7 @@ public class PrivilegeBaseApiServiceImpl implements IPrivilegeBaseApiService {
 		
 		for(Module m:moduleList)
 		{
-			if(m.getFlag().equals(moduleFlag))
+			if(m.getFlag().equals(visitedModule))
 			{
 				sb.append("<li class=\"active\">");
 			} else {
@@ -81,7 +81,7 @@ public class PrivilegeBaseApiServiceImpl implements IPrivilegeBaseApiService {
 			sb.append("<span class=\"selected\"></span>");
 			sb.append("<span class=\"arrow open\"></span>");
 			sb.append("</a>");
-			sb.append(buildResourceTree(resourceList,"s",visitedStructure,moduleFlag));
+			sb.append(buildResourceTree(resourceList,"s",visitedResource,visitedModule));
 			sb.append("</li>");
 		}
 		
@@ -96,7 +96,7 @@ public class PrivilegeBaseApiServiceImpl implements IPrivilegeBaseApiService {
 	 * @param moduleFlag：当前访问页面所属的模块
 	 * @return
 	 */
-	private String buildResourceTree(List<Resource> resourceList,String structure,String visitedStructure,String moduleFlag)
+	private String buildResourceTree(List<Resource> resourceList,String structure,String visitedResource,String visitedModule)
 	{
 		if(resourceList == null || resourceList.size()==0)
 		{
@@ -107,7 +107,7 @@ public class PrivilegeBaseApiServiceImpl implements IPrivilegeBaseApiService {
 		List<Resource> sonList = new ArrayList<Resource>();
 		for(Resource r:resourceList)
 		{
-			if(r.getModuleFlag().equals(moduleFlag)
+			if(r.getModuleFlag().equals(visitedModule)
 					&& r.getStructure().split("-").length==parentLength+1
 					&& r.getStructure().contains(structure))
 			{
@@ -124,8 +124,8 @@ public class PrivilegeBaseApiServiceImpl implements IPrivilegeBaseApiService {
 		for(Resource r:sonList)
 		{
 			//递归，找子级的树形结构
-			String s = buildResourceTree(resourceList,r.getStructure(),visitedStructure,moduleFlag);
-			if(visitedStructure.contains(r.getStructure()))
+			String s = buildResourceTree(resourceList,r.getStructure(),visitedResource,visitedModule);
+			if(visitedResource.contains(r.getStructure()))
 			{
 				sb.append("<li class=\"active\">");
 			} else {
@@ -133,7 +133,14 @@ public class PrivilegeBaseApiServiceImpl implements IPrivilegeBaseApiService {
 			}
 			if(s.equals(""))
 			{
-				sb.append("<a href=\""+r.getUrl()+"\">");
+				sb.append("<a href=\"")
+					.append(r.getUrl())
+					.append("?visitedModule=")
+					.append(visitedModule)
+					.append("&visitedResource=")
+					.append(r.getStructure())
+					.append("\">")
+					;
 				sb.append(r.getName());
 				sb.append("</a>");
 			}
@@ -141,7 +148,7 @@ public class PrivilegeBaseApiServiceImpl implements IPrivilegeBaseApiService {
 			{
 				sb.append("<a href=\"javascript:;\">");
 				sb.append(r.getName());
-				if(visitedStructure.contains(r.getStructure()))
+				if(visitedResource.contains(r.getStructure()))
 				{
 					sb.append("<span class=\"arrow open\"></span>");				
 				}

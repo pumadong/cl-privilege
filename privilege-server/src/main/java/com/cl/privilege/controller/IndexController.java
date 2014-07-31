@@ -30,16 +30,18 @@ public class IndexController {
 	private ConfigUtil configUtil;
 	
 	@RequestMapping("/main")
-    public String main(String moduleFlag,HttpServletRequest request,ModelMap map) {
+    public String main(String visitedModule,HttpServletRequest request,ModelMap map) {
 
-		User user = (User) request.getSession().getAttribute(SessionUtil.SessionSystemLoginUserName);
-		String menus = privilegeBaseApiService.getModuleTree(user.getId(),"p","");
-        int hours = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);        
-        
+		visitedModule = "p";
+		
+		//初始化用户、菜单
+		User user = SessionUtil.getSessionUser(request);
+		String menus = privilegeBaseApiService.getModuleTree(user.getId(),visitedModule,"");
         map.put("user", user);
         map.put("menus", menus);
+        
+        int hours = Calendar.getInstance().get(Calendar.HOUR_OF_DAY); 
         map.put("hours", hours);
-        map.put("moduleFlag", moduleFlag);
         
         return "main.ftl";
     }

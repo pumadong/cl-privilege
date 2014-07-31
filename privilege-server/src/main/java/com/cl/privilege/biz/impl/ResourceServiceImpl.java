@@ -9,7 +9,7 @@ import com.cl.privilege.biz.IResourceService;
 import com.cl.privilege.mapper.ResourceMapper;
 import com.cl.privilege.model.Resource;
 import com.cl.privilege.model.User;
-import com.cl.privilege.utils.CommonUtil;
+import com.cl.privilege.utils.StringUtil;
 
 @Service
 public class ResourceServiceImpl implements IResourceService {
@@ -52,7 +52,7 @@ public class ResourceServiceImpl implements IResourceService {
 				String[] structures = r.getStructure().split("-");
 				if(structures.length == parentLevel + 1)
 				{
-					if(CommonUtil.isNumber(structures[structures.length-1])&&CommonUtil.compareTo(structures[structures.length-1], structure)>0)
+					if(StringUtil.isNumber(structures[structures.length-1])&&StringUtil.compareTo(structures[structures.length-1], structure)>0)
 					{
 						structure = structures[structures.length-1];
 					}
