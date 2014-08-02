@@ -29,7 +29,8 @@
     delete from p_resource
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.cl.privilege.model.Resource" >
+  <!-- 会自动填充自增主键到Resource对象中  -->
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.cl.privilege.model.Resource" >
     insert into p_resource (id, name, url, 
       remark, parent_id, structure, 
       sort_no, module_flag, create_person, 
@@ -41,7 +42,7 @@
       #{createDate,jdbcType=TIMESTAMP}, #{updatePerson,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.cl.privilege.model.Resource" >
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.cl.privilege.model.Resource" >
     insert into p_resource
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -205,7 +206,7 @@
     <select id="isUsedByRole" parameterType="java.lang.String" resultType="java.lang.Boolean">
     	select exists(select 1 from p_role_resource arr where arr.resource_id=#{resourceId} limit 1);
     </select>
-    <select id="getResourceListByRoleId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <select id="getResourceListByRoleId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
 	    select 
 	    <include refid="Base_Column_List" />
 	    from p_resource re
@@ -213,10 +214,10 @@
 		on re.id=arr.resource_id 
 		where arr.role_id=#{roleId} 
     </select>
-    <select id="getResourceListByParentId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <select id="getResourceListByParentId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
 	    select 
 	    <include refid="Base_Column_List" />
 	    from p_resource re
-		where re.parent_id=#{roleId} 
+		where re.parent_id=#{parentId} 
     </select>
 </mapper>

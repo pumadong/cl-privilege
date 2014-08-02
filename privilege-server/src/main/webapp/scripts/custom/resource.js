@@ -1,10 +1,10 @@
-var selectedDepartmentNode;
+var selectedResourceNode;
 
-var DepartmentTree = function () {
+var ResourceTree = function () {
 
-     var ajaxDepartmentTree = function() {
+     var ajaxResourceTree = function() {
 
-        $("#department_tree").jstree({
+        $("#resource_tree").jstree({
             "core" : {
                 "themes" : {
                     "responsive": false
@@ -15,7 +15,7 @@ var DepartmentTree = function () {
                 "check_callback" : true,
                 'data' : {
                     'url' : function (node) {
-                		return 'getDepartmentTree.do';
+                		return 'getResourceTree.do';
                     },
                     'data' : function (node) {
                     	return { 'parent' : node.id };
@@ -30,31 +30,38 @@ var DepartmentTree = function () {
                     "icon" : "fa fa-file icon-warning icon-lg"
                 }
             },
-            "state" : { "key" : "departmentTree" },
+            "state" : { "key" : "resourceTree" },
             "plugins" : [ "state", "types" ]
         })
         .on('select_node.jstree', function (e, data) {
-        	loadNodeData(data.node.id);
-        })
+        	var id = data.node.id;
+        	//只处理菜单资源，不处理模块
+        	if(!isNaN(id))
+        	{
+        		loadNodeData(id);
+        	} else {
+        		clearInputValue();
+        	}
+        });
     
     }
 
     return {
         //main function to initiate the module
         init: function () {
-    		ajaxDepartmentTree();
+    		ajaxResourceTree();
         }
     };
 
 }();
 
-var DepartmentForm = function () {
+var ResourceForm = function () {
 
     var handleValidation = function() {
         	// for more info visit the official plugin documentation: 
             // http://docs.jquery.com/Plugins/Validation
 
-            var form1 = $('#department_form');
+            var form1 = $('#resource_form');
             var error1 = $('.alert-danger', form1);
             var success1 = $('.alert-success', form1);
 
@@ -67,6 +74,9 @@ var DepartmentForm = function () {
                     name: {
                         minlength: 2,
                         required: true
+                    },
+                    url: {
+                    	required: true
                     },
                     sortNo: {
                     	maxlength:5,
@@ -161,19 +171,21 @@ function loadNodeData(nodeid){
 		
 		$("#id").attr("value",node.id);
 		$("#name").attr("value",node.name);
-		$("#name").blur();		
+		$("#name").blur();
+		$("#url").attr("value",node.url);
+		$("#url").blur();
 		$("#sortNo").attr("value",node.sortNo);
 		$("#sortNo").blur();
 		$("#remark").attr("value",node.remark);
 		
-		selectedDepartmentNode = node;
+		selectedResourceNode = node;
 	});
 }
 
 //增加节点
 function addMenuNode(){
 	
-	var ref = $('#department_tree').jstree(true),sel = ref.get_selected(true);
+	var ref = $('#resource_tree').jstree(true),sel = ref.get_selected(true);
 	
 	if(!sel.length) {
 		alert('请选择一个节点！');
@@ -191,9 +203,11 @@ function addMenuNode(){
 	var url="add.do";
 	var data={
 		"name":$("#name").val(),
+		"url":$("#url").val(),
+		"moduleFlag":sel.li_attr.flag,
 		"remark": $("#remark").val(),
 		"sortNo" : $("#sortNo").val(),
-		"parentId":sel.id
+		"parentId":isNaN(sel.id) ? 0 : sel.id
 	};
 	
 	ajaxRequest(url,data,function(result){
@@ -211,6 +225,7 @@ function addMenuNode(){
 			var nodeData = {
 				id:node.id,
 				text:node.name,
+				flag:sel.li_attr.flag,
 				sortNo:node.sortNo,
 				icon: "fa fa-briefcase icon-success"
 			};
@@ -238,7 +253,7 @@ function addMenuNode(){
 //修改节点数据
 function updateMenuNode(){
 	
-	var ref = $('#department_tree').jstree(true),sel = ref.get_selected(true);
+	var ref = $('#resource_tree').jstree(true),sel = ref.get_selected(true);
 	
 	if(!sel.length) {
 		alert('请选择一个节点！');
@@ -253,6 +268,7 @@ function updateMenuNode(){
 	
 	var data={
 		"name":$("#name").val(),
+		"url": $("#url").val(),
 		"remark": $("#remark").val(),
 		"sortNo" : $("#sortNo").val(),
 		"id":$("#id").val()
@@ -270,9 +286,10 @@ function updateMenuNode(){
 		}
 		
 		var node = eval("("+result+")");
+
 		ref.rename_node(sel,node.name)
 		
-		if(selectedDepartmentNode.sortNo != node.sortNo)
+		if(selectedResourceNode.sortNo != node.sortNo)
 		{
 			//找出根据sortNo，节点应该插入的位置pos
 			var parent = ref.get_node(ref.get_parent(sel));
@@ -297,7 +314,7 @@ function updateMenuNode(){
 //删除节点
 function removeMenuNode(){
 
-	var ref = $('#department_tree').jstree(true),sel = ref.get_selected(true);
+	var ref = $('#resource_tree').jstree(true),sel = ref.get_selected(true);
 	
 	if(!sel.length) {
 		alert('请选择要删除的节点！');
@@ -321,7 +338,7 @@ function removeMenuNode(){
 		if(!result) return ;
 		result = result.replace(/(^\s*)|(\s*$)/g,'');
 
-		if(result == "success"){
+		if(result == "success"){			
 			
 			//如果父节点是叶子了，给个新样式
 			var parent = ref.get_node(ref.get_parent(sel));
@@ -331,13 +348,13 @@ function removeMenuNode(){
 				ref.set_icon(parent,"fa fa-briefcase icon-success");
 			}
 			
-			ref.delete_node(sel);			
+			ref.delete_node(sel);
 			
 			clearInputValue();
 			alert("删除成功");
 			return ;
 		}else{
-			alert("删除失败,被使用的部门不允许删除");
+			alert("删除失败,被使用的菜单不允许删除");
 		}
 	});
 }
@@ -358,6 +375,8 @@ function clearInputValue(){
 	$("#id").attr("value","");
 	$("#name").attr("value","");
 	$("#name").blur();
+	$("#url").attr("value","");
+	$("#url").blur();
 	$("#remark").val("");
 	$("#sortNo").attr("value","");
 	$("#sortNo").blur();

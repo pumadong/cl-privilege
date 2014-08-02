@@ -129,11 +129,12 @@ public class DepartmentServiceImpl implements IDepartmentService {
 			sb.append("{")
 				.append("\"id\":\"").append(d.getId()).append("\"")
 				.append(",\"parent\":\"").append(d.getParentId()==0?"#":d.getParentId()).append("\"")
-				.append(",\"text\":\"").append(d.getName()).append("\"");
+				.append(",\"text\":\"").append(d.getName()).append("\"")
+				.append(",\"li_attr\":{\"sortNo\":").append(d.getSortNo()).append("}");;
 			//前两个级别默认打开
 			if(level <=3)
 			{
-				sb.append(",\"selected\":true");
+				sb.append(",\"state\":{\"opened\":true}");
 			}
 			//最后一个级别换个绿色图标
 			if(!setParent.contains(d.getId()))

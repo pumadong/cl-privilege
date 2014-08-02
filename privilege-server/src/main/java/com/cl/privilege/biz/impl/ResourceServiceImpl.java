@@ -1,12 +1,19 @@
 package com.cl.privilege.biz.impl;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cl.privilege.biz.IResourceService;
+import com.cl.privilege.mapper.ModuleMapper;
 import com.cl.privilege.mapper.ResourceMapper;
+import com.cl.privilege.model.Module;
 import com.cl.privilege.model.Resource;
 import com.cl.privilege.model.User;
 import com.cl.privilege.utils.StringUtil;
@@ -15,7 +22,24 @@ import com.cl.privilege.utils.StringUtil;
 public class ResourceServiceImpl implements IResourceService {
 
 	@Autowired
+	private ModuleMapper moduleMapper;
+	@Autowired
 	private ResourceMapper resourceMapper;
+	
+	private void setResourceInsert(Resource resource,User operator)
+	{
+		Date d = new Date();
+		resource.setCreatePerson(operator.getUsername());
+		resource.setUpdatePerson(operator.getUsername());
+		resource.setCreateDate(d);
+		resource.setUpdateDate(d);
+	}
+	private void setResourceUpdate(Resource resource,User operator)
+	{
+		Date d = new Date();
+		resource.setUpdatePerson(operator.getUsername());
+		resource.setUpdateDate(d);
+	}
 	
 	@Override
 	public List<Resource> getResourceList()
@@ -61,9 +85,11 @@ public class ResourceServiceImpl implements IResourceService {
 			structure = String.valueOf(Integer.parseInt(structure) + 1);
 			structure = parentResource.getStructure()+"-" + structure;
 		}
-		resource.setCreatePerson(user.getUsername());
-		resource.setUpdatePerson(user.getUsername());
+		
 		resource.setStructure(structure);
+		
+		setResourceInsert(resource,user);
+		
 		return resourceMapper.insertSelective(resource);
 
 	}
@@ -71,7 +97,7 @@ public class ResourceServiceImpl implements IResourceService {
 	@Override
 	public Integer updateResourceById(Resource resource,User user)
 	{
-		resource.setUpdatePerson(user.getUsername());
+		setResourceUpdate(resource,user);
 		return resourceMapper.updateByPrimaryKeySelective(resource);
 	}
 	
@@ -91,5 +117,92 @@ public class ResourceServiceImpl implements IResourceService {
 	public List<Resource> getResourceListByRoleId(Integer roleId)
 	{
 		return resourceMapper.getResourceListByRoleId(roleId);
+	}
+	
+	@Override
+	public String getResourceTree()
+	{
+		List<Module> moduleList = moduleMapper.getModuleList();
+		List<Resource> resourceList = resourceMapper.getResourceList();
+		Collections.sort(moduleList,new ComparatorModule());
+		Collections.sort(resourceList,new ComparatorResource());
+		
+		Set<Integer> setParent = new HashSet<Integer>();
+		for(Resource r:resourceList)
+		{
+			setParent.add(r.getParentId());
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("[");
+		int i = 0;		
+		for(Module m:moduleList)
+		{
+			if(i!=0)
+			{
+				sb.append(",");
+			}
+			i++;
+			sb.append("{")
+				.append("\"id\":\"").append(m.getFlag()).append("\"")
+				.append(",\"parent\":\"").append("#\"")
+				.append(",\"text\":\"").append(m.getName()).append("\"")
+				.append(",\"li_attr\":{\"flag\":\"").append(m.getFlag()).append("\"}");
+			//前两个级别默认打开
+			sb.append(",\"state\":{\"opened\":true}");
+			sb.append("}");
+		}
+		i = 0;
+		for(Resource r:resourceList)
+		{
+			int level = r.getStructure().split("-").length;
+			
+			sb.append(",");
+			
+			i++;
+			sb.append("{")
+			.append("\"id\":\"").append(r.getId()).append("\"")
+			.append(",\"parent\":\"").append(r.getParentId()==0?r.getModuleFlag():r.getParentId()).append("\"")
+			.append(",\"text\":\"").append(r.getName()).append("\"")
+			.append(",\"li_attr\":{\"flag\":\"").append(r.getModuleFlag())
+				.append("\",\"sortNo\":").append(r.getSortNo()).append("}");
+			//前两个级别默认打开
+			if(level <=2)
+			{
+				sb.append(",\"state\":{\"opened\":true}");
+			}
+			//最后一个级别换个绿色图标
+			if(!setParent.contains(r.getId()))
+			{
+				sb.append(", \"icon\": \"fa fa-briefcase icon-success\"");
+			}
+			sb.append("}");
+		}
+		sb.append("]");
+		return sb.toString();
+	}
+	
+	/**
+	 * Module排序器，保证jsTree可以按照SortNo字段显示
+	 */
+	class ComparatorModule implements Comparator<Module> {
+		public int compare(Module r1, Module r2) {
+			return r1.getSortNo().compareTo(r2.getSortNo());
+		}
+	}
+	
+	/**
+	 * Resource排序器，保证jsTree可以按照SortNo字段显示
+	 */
+	class ComparatorResource implements Comparator<Resource> {
+		public int compare(Resource r1, Resource r2) {
+			int l1 = r1.getStructure().length();
+			int l2 = r2.getStructure().length();
+			if(l1 == l2 )
+			{
+				return r1.getSortNo().compareTo(r2.getSortNo());
+			}
+			return l1>l2?1:-1;
+		}
 	}
 }

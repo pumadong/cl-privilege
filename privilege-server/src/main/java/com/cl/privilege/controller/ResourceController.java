@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cl.privilege.api.IPrivilegeBaseApiService;
-import com.cl.privilege.biz.IDepartmentService;
-import com.cl.privilege.model.Department;
+import com.cl.privilege.biz.IResourceService;
+import com.cl.privilege.model.Resource;
 import com.cl.privilege.model.User;
 import com.cl.privilege.utils.ConfigUtil;
 import com.cl.privilege.utils.ConstantUtil;
@@ -23,19 +23,19 @@ import com.cl.privilege.utils.SessionUtil;
 
 
 /**
- *部门管理相关的控制器 
+ *菜单资源管理相关的控制器 
  */
 
 @Controller
-@RequestMapping("/controller/department")
-public class DepartmentController {
+@RequestMapping("/controller/resource")
+public class ResourceController {
 
 	@Autowired
 	private IPrivilegeBaseApiService privilegeBaseApiService;
 	@Autowired
 	private ConfigUtil configUtil;
 	@Autowired
-	private IDepartmentService departmentService;
+	private IResourceService resourceService;
 	
 	@RequestMapping("/list")
     public String main(String visitedModule,String visitedResource,HttpServletRequest request,ModelMap map) {
@@ -46,48 +46,48 @@ public class DepartmentController {
         map.put("user", user);
         map.put("menus", menus);
         
-		return "department/list.ftl";
+		return "resource/list.ftl";
     }
 	
 	@ResponseBody
-	@RequestMapping("/getDepartmentTree")
-    public String getDepartmentTree(HttpServletRequest request,HttpServletResponse response,ModelMap map) {
+	@RequestMapping("/getResourceTree")
+    public String getResourceTree(HttpServletRequest request,HttpServletResponse response,ModelMap map) {
 
-		//这是为了jstree插件使用，这个插件只对Content-Type为json和html的内容进行处理		
+		//这是为了jstree插件使用，这个插件只对Content-Type为json和html的内容进行处理
 		response.setContentType("application/json;charset=UTF-8");
 	
-		return departmentService.getDepartmentTree();
+		return resourceService.getResourceTree();
 	}
 	
 	@ResponseBody
 	@RequestMapping("/get")
     public String get(Integer id,ModelMap map) {
 		
-		Department department = departmentService.getDepartmentById(id);		
-		return JsonUtil.convertObj2json(department).toString();		
+		Resource resource = resourceService.getResourceById(id);
+		return JsonUtil.convertObj2json(resource).toString();		
 	}
 	
 	@ResponseBody
 	@RequestMapping("/add")
-    public String add(@ModelAttribute("department")Department department,HttpServletRequest request) {
+    public String add(@ModelAttribute("resource")Resource resource,HttpServletRequest request) {
 		
 		//从session取出User对象
 		User user = SessionUtil.getSessionUser(request);
 		//生成节点
-		departmentService.createDepartment(department,user);		
-		return JsonUtil.convertObj2json(department).toString();
+		resourceService.createResource(resource, user);
+		return JsonUtil.convertObj2json(resource).toString();
     }
 	
 	@ResponseBody
 	@RequestMapping("/update")
-    public String update(@ModelAttribute("department")  Department department,HttpServletRequest request) {
+    public String update(@ModelAttribute("resource")  Resource resource,HttpServletRequest request) {
 		//从session取出User对象
 		User user = SessionUtil.getSessionUser(request);
 
 		//生成节点积累
-		departmentService.updateDepartmentById(department,user);
+		resourceService.updateResourceById(resource, user);
 		
-		return JsonUtil.convertObj2json(department).toString();
+		return JsonUtil.convertObj2json(resource).toString();
     }
 	
 	@ResponseBody
@@ -95,12 +95,12 @@ public class DepartmentController {
 	public String  delete(@RequestParam("id") Integer id) throws Exception{		
 	
 		//判断节点是否被用户关联
-		if(departmentService.isUsedByUser(id))
+		if(resourceService.isUsedByRole(id))
 		{
 			return ConstantUtil.Fail;
 		}
 		
-		departmentService.deleteDepartmentById(id);
+		resourceService.deleteResourceById(id);
 		
 		return ConstantUtil.Success;		
 	}

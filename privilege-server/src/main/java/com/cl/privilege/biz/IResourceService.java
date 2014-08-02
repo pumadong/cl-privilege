@@ -63,4 +63,10 @@ public interface IResourceService {
 	 * @return
 	 */
 	List<Resource> getResourceListByRoleId(Integer roleId);
+	
+	/**
+	 * 获取菜单资源树
+	 * @return
+	 */
+	String getResourceTree();
 }

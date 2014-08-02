@@ -16,7 +16,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- BEGIN HEAD -->
 <head>
 <meta charset="utf-8"/>
-<title>创力 | 系统管理 - 部门管理</title>
+<title>创力 | 系统管理 - 菜单资源管理</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta content="" name="description"/>
@@ -62,7 +62,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				<div class="col-md-12">
 					<!-- BEGIN PAGE TITLE & BREADCRUMB-->
 					<h3 class="page-title">
-					配置中心
+					菜单资源管理
 					</h3>
 					<ul class="page-breadcrumb breadcrumb">
 						<li>
@@ -80,7 +80,7 @@ License: You must have a valid license purchased only from themeforest(the above
 						</li>
 						<li>
 							<a>
-								部门管理
+								菜单资源管理
 							</a>
 						</li>
 					</ul>
@@ -94,11 +94,11 @@ License: You must have a valid license purchased only from themeforest(the above
 					<div class="portlet blue box">
 						<div class="portlet-title">
 							<div class="caption">
-								部门树
+								菜单资源树
 							</div>						
 						</div>
 						<div class="portlet-body">
-			           		<div id="department_tree" class="tree-demo">
+			           		<div id="resource_tree" class="tree-demo">
 							</div>
 						</div>
 					</div>
@@ -107,22 +107,32 @@ License: You must have a valid license purchased only from themeforest(the above
 					<div class="portlet blue box">
 						<div class="portlet-title">
 							<div class="caption">
-								部门管理
+								菜单资源管理
 							</div>
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<form action="#" id="department_form" class="form-horizontal">
+							<form action="#" id="resource_form" class="form-horizontal">
 								<div class="form-body">
-										<div class="form-group">
+									<div class="form-group">
 										<label class="control-label col-md-3">名称
 										<span class="required">
 											 *
 										</span>
 										</label>
-										<div class="col-md-4">
+										<div class="col-md-8">
 											<input type="hidden" id="id" name="id"/>
 											<input type="text" id="name" name="name" data-required="1" class="form-control"/>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-md-3">URL
+										<span class="required">
+											 *
+										</span>
+										</label>
+										<div class="col-md-8">
+											<input type="text" id="url" name="url" data-required="1" class="form-control"/>
 										</div>
 									</div>
 									<div class="form-group">
@@ -131,14 +141,14 @@ License: You must have a valid license purchased only from themeforest(the above
 											 *
 										</span>
 										</label>
-										<div class="col-md-4">
+										<div class="col-md-8">
 											<input id="sortNo" name="sortNo" type="text" class="form-control" maxlength="5"/>
 										</div>
 									</div>
 									<div class="form-group">
 										<label class="control-label col-md-3">备注
 										</label>
-										<div class="col-md-4">
+										<div class="col-md-8">
 											<input type="text" id="remark" name="remark" data-required="1" class="form-control"/>
 										</div>
 									</div>
@@ -186,14 +196,14 @@ License: You must have a valid license purchased only from themeforest(the above
 <script type="text/javascript" src="${IncPath}/assets/plugins/jquery-validation/dist/jquery.validate.min.js"></script>
 <script type="text/javascript" src="${IncPath}/assets/plugins/jquery-validation/dist/additional-methods.min.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
-<script src="${BasePath}/scripts/custom/department.js"></script>
+<script src="${BasePath}/scripts/custom/resource.js"></script>
 <script src="${IncPath}/assets/scripts/core/app.js"></script>
 <script>
         jQuery(document).ready(function() {       
            // initiate layout and plugins
            App.init();
-           DepartmentTree.init();
-           DepartmentForm.init();
+           ResourceTree.init();
+           ResourceForm.init();
         });
     </script>
 <!-- END JAVASCRIPTS -->

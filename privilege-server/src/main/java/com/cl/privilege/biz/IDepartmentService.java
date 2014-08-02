@@ -53,6 +53,10 @@ public interface IDepartmentService {
 	 */
 	Boolean isUsedByUser(Integer departmentId);
 	
+	/**
+	 * 获取部门树
+	 * @return
+	 */
 	String getDepartmentTree();
 	
 }

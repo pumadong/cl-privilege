@@ -33,6 +33,9 @@ public class PrivilegeBaseApiServiceImpl implements IPrivilegeBaseApiService {
 	@Override
 	public String getModuleTree(Integer userId,String visitedModule,String visitedResource)
 	{
+		if(visitedModule == null) visitedModule = "";
+		if(visitedResource == null) visitedResource = "";
+		
 		User user = userMapper.selectByPrimaryKey(userId);
 		if(user == null)	return "";
 		
@@ -107,8 +110,7 @@ public class PrivilegeBaseApiServiceImpl implements IPrivilegeBaseApiService {
 		List<Resource> sonList = new ArrayList<Resource>();
 		for(Resource r:resourceList)
 		{
-			if(r.getModuleFlag().equals(visitedModule)
-					&& r.getStructure().split("-").length==parentLength+1
+			if(r.getStructure().split("-").length==parentLength+1
 					&& r.getStructure().contains(structure))
 			{
 				sonList.add(r);
