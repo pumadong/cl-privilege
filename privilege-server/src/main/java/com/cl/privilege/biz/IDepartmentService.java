@@ -59,4 +59,9 @@ public interface IDepartmentService {
 	 */
 	String getDepartmentTree();
 	
+	/**
+	 * 获取Select控件中Options需要的List
+	 * @return
+	 */
+	List<Department> getDepartmentListForOption();
 }

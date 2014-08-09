@@ -15,16 +15,17 @@
     <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
     <result column="update_person" property="updatePerson" jdbcType="VARCHAR" />
     <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="department_name" property="departmentName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, username, password, fullname, gender, is_admin, department_id, is_lock, is_delete, 
-    create_person, create_date, update_person, update_date
+    p_user.id, p_user.username, p_user.password, p_user.fullname, p_user.gender, p_user.is_admin, p_user.department_id, p_user.is_lock, p_user.is_delete, 
+    p_user.create_person, p_user.create_date, p_user.update_person, p_user.update_date, p_department.name department_name
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from p_user
-    where id = #{id,jdbcType=INTEGER}
+    from p_user left join p_department on p_user.department_id=p_department.id
+    where p_user.id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from p_user
@@ -200,13 +201,13 @@
     	</if>
     </sql>
     <sql id="orderby">
-    	order by p_user.update_date desc 
+    	order by p_user.id desc 
     </sql>
 	<select id="getUserByUsername" resultMap="BaseResultMap" parameterType="java.lang.String" >
 		select 
 		<include refid="Base_Column_List" />
-		from p_user
-		where username = #{username,jdbcType=VARCHAR}
+		from p_user left join p_department on p_user.department_id=p_department.id
+		where p_user.username = #{username,jdbcType=VARCHAR}
 	</select>    
     <select id="getUserTotalBySearch" parameterType="com.cl.privilege.model.UserSearchModel" resultType="java.lang.Integer">
     	select count(0) 
@@ -217,7 +218,7 @@
     <select id="getUserListBySearch" parameterType="com.cl.privilege.model.UserSearchModel" resultMap="BaseResultMap">
         select 
 	    <include refid="Base_Column_List" />
-	    from p_user
+	    from p_user left join p_department on p_user.department_id=p_department.id
         <include refid="where"/>
         <include refid="orderby"/>
     </select>

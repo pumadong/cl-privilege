@@ -16,6 +16,7 @@ import com.cl.privilege.mapper.UserMapper;
 import com.cl.privilege.model.User;
 import com.cl.privilege.model.UserSearchModel;
 import com.cl.privilege.utils.ConstantUtil;
+import com.cl.privilege.utils.StringUtil;
 
 
 @Service
@@ -29,6 +30,8 @@ public class UserServiceImpl implements IUserService {
 	private void setPersonInsert(User user,User operator)
 	{
 		Date d = new Date();
+		user.setIsLock(false);
+		user.setIsDelete(false);
 		user.setCreatePerson(operator.getUsername());
 		user.setUpdatePerson(operator.getUsername());
 		user.setCreateDate(d);
@@ -70,6 +73,7 @@ public class UserServiceImpl implements IUserService {
 	public Integer createUser(User user,User operator)
 	{
 		setPersonInsert(user,operator);
+		user.setPassword(StringUtil.makeMD5(user.getPassword()));
 		return userMapper.insertSelective(user);
 	}
 	
@@ -77,7 +81,7 @@ public class UserServiceImpl implements IUserService {
 	public Integer updateUserById(User user,User operator)
 	{
 		setPersonUpdate(user,operator);
-		return userMapper.updateByPrimaryKey(user);
+		return userMapper.updateByPrimaryKeySelective(user);
 	}
 	
 	@Override
@@ -120,10 +124,58 @@ public class UserServiceImpl implements IUserService {
 		
 		return ConstantUtil.Success;
 	}
-
-	public static void main(String[] args)
+	
+	@Override
+	public String getUserDataTables(UserSearchModel searchModel)
 	{
-		CharSequence s = "d青ddd";
-		System.out.print(s.subSequence(0,2));
+		Integer total = getUserTotalBySearch(searchModel);
+		List<User> userList = getUserListBySearch(searchModel);		
+		if(userList==null || userList.size()==0)
+		{
+			return "{\"iTotalRecords\":0,\"iTotalDisplayRecords\":0,\"aaData\":[]}";
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("{\"iTotalRecords\":%d,\"iTotalDisplayRecords\":%d,\"aaData\":[",total,total));
+		int i= 0;
+		for(User u:userList)
+		{
+			if(i != 0) sb.append(",");
+			addDataRow(sb,u);
+			i++;
+		}
+		sb.append("]}");
+		return sb.toString();
+	}
+	
+	@Override
+	public String getUserDataRow(Integer id)
+	{
+		User u = getUserById(id);
+		StringBuilder sb = new StringBuilder();
+		addDataRow(sb,u);
+		return sb.toString();
+	}
+
+	private void addDataRow(StringBuilder sb,User u)
+	{
+		sb.append("[");
+		sb.append("\"<input type=\\\"checkbox\\\" name=\\\"id[]\\\" value=\\\"").append(u.getId()).append("\\\">\"");
+		sb.append(",").append(u.getId());
+		sb.append(",\"").append(u.getUsername()).append("\"");
+		sb.append(",\"").append(u.getFullname()).append("\"");
+		sb.append(",\"").append(u.getGender()?"男":"女").append("\"");
+		sb.append(",\"").append(u.getIsAdmin()?"管理员":"普通").append("\"");
+		sb.append(",\"").append(u.getIsLock()?"是":"否").append("\"");
+		sb.append(",\"").append(u.getDepartmentName()==null?"":u.getDepartmentName()).append("\"");
+		sb.append(",\"").append(u.getUpdatePerson()).append("\"");
+		sb.append(",\"").append(StringUtil.formatDate(u.getUpdateDate(),"yyyy-MM-dd HH:mm:ss")).append("\"");
+		sb.append(",\"")
+		.append("<a href=\\\"javascript:User.update_click('").append(u.getId()).append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-edit\\\"></i> 修改</a>")
+		.append("&nbsp;&nbsp;<a href=\\\"javascript:").append(u.getIsLock()?"User.unlock('":"User.lock('").append(u.getId()).append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-").append(u.getIsLock()?"un":"").append("lock\\\"></i> ").append(u.getIsLock()?"解锁":"锁定").append("</a>")
+		.append("&nbsp;&nbsp;<a href=\\\"javascript:User.remove('").append(u.getId()).append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-times\\\"></i> 删除</a>")
+		.append("&nbsp;&nbsp;<a href=\\\"javascript:User.assign_click('").append(u.getId()).append("');\\\" class=\\\"btn btn-xs default btn-editable\\\"><i class=\\\"fa fa-key\\\"></i> 分配角色</a>")
+		.append("\"");
+		sb.append("]");
 	}
 }

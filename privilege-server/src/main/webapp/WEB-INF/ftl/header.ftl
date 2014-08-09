@@ -17,7 +17,7 @@
 			<!-- BEGIN USER LOGIN DROPDOWN -->
 			<li class="dropdown user">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-					<img alt="" src="${IncPath}/assets/img/avatar3_small.jpg"/>
+					<img alt="" src="${IncPath}/assets/img/<#if user.gender==true>avatar3_small.jpg<#else>avatar2_small.jpg</#if>"/>
 					<span class="username">
 						 ${user.fullname?default("")}
 					</span>
@@ -30,7 +30,12 @@
 						</a>
 					</li>
 					<li>
-						<a href="logout.do">
+						<a href="javascript:Cl.showModalWindow(Cl.modalName,'${BasePath}/controller/modifypasswordform.do');" id="modify_password">
+							<i class="fa fa-arrows"></i> 修改密码
+						</a>
+					</li>
+					<li>
+						<a href="${BasePath}/controller/logout.do">
 							<i class="fa fa-key"></i> 退出
 						</a>
 					</li>

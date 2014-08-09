@@ -1,5 +1,6 @@
 package com.cl.privilege.biz.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -16,6 +17,7 @@ import com.cl.privilege.model.Department;
 import com.cl.privilege.model.User;
 import com.cl.privilege.utils.StringUtil;
 import com.cl.privilege.utils.ConstantUtil;
+
 
 @Service
 public class DepartmentServiceImpl implements IDepartmentService {
@@ -145,6 +147,97 @@ public class DepartmentServiceImpl implements IDepartmentService {
 		}
 		sb.append("]");
 		return sb.toString();
+	}
+	
+	@Override
+	public List<Department> getDepartmentListForOption()
+	{
+		List<Department> departments = getDepartmentList();
+		if(departments==null || departments.size()==0)
+		{
+			return null;
+		}
+			
+		List<Department> tempImmediateDepartments = new ArrayList<Department>();
+		for(Department d:departments)
+		{
+			if(d.getParentId()==0)
+			{
+				//一级子节点
+				tempImmediateDepartments.add(d);
+			}
+		}
+		
+		return buildDepartmentListForOption(departments,tempImmediateDepartments,"s");
+	}
+	
+	/**
+	 * 这种写法和直接对所有部门列表进行循环的写法比较
+	 * 优点是：更少的循环次数，所以也就是更少的CPU计算和更快的返回时间；缺点是：更多的内存占用
+	 * 也可以看做是一种空间换时间
+	 * @param descendantDepartments
+	 * @param immediateDepartments
+	 * @param structure
+	 * @return
+	 */
+	private List<Department> buildDepartmentListForOption(List<Department> descendantDepartments,List<Department> immediateDepartments,String structure)
+	{
+		if(descendantDepartments == null || descendantDepartments.size()==0
+				||immediateDepartments == null || immediateDepartments.size()==0)
+		{
+			return null;
+		}
+		
+		Collections.sort(immediateDepartments,new ComparatorDepartment());
+		
+		List<Department> result = new ArrayList<Department>();
+
+		Integer index = 0;
+		Integer level = structure.split("-").length;
+		String prefix = "";
+		for(int i=0;i<level-1;i++)
+		{
+			prefix += "&nbsp;&nbsp;&nbsp;";
+		}
+		for(Department department:immediateDepartments)
+		{
+			if(department.getStructure().split("-").length != level+1 
+					|| !department.getStructure().startsWith(structure+"-")
+					)
+			{
+				continue;
+			}
+			department.setName(prefix + department.getName());
+			result.add(department);
+
+			List<Department> tempDescendantDepartment = new ArrayList<Department>();
+			List<Department> tempImmediateDepartment = new ArrayList<Department>();
+			for(Department r:descendantDepartments)
+			{
+				if(r.getStructure().startsWith(department.getStructure()+"-"))
+				{
+					if(r.getStructure().split("-").length == level + 2 )
+					{
+						//第一级子节点
+						tempImmediateDepartment.add(r);
+					}
+					//所有子节点
+					tempDescendantDepartment.add(r);
+				}
+			}
+			if(tempDescendantDepartment!=null && tempDescendantDepartment.size()>0
+					&& tempImmediateDepartment!=null && tempImmediateDepartment.size()>0)
+			{
+				List<Department> sub = buildDepartmentListForOption(tempDescendantDepartment,tempImmediateDepartment, department.getStructure());
+				
+				if(sub!=null && sub.size()>0)
+				{
+					result.addAll(sub);
+				}
+			}			
+			index++;
+		}
+		return result;
 	}
 	
 	/**

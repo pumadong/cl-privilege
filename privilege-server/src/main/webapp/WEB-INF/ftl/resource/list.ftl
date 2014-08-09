@@ -22,22 +22,26 @@ License: You must have a valid license purchased only from themeforest(the above
 <meta content="" name="description"/>
 <meta content="" name="author"/>
 <!-- BEGIN GLOBAL MANDATORY STYLES -->
-<link href="${IncPath}/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
-<link href="${IncPath}/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-<link href="${IncPath}/assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" type="text/css" href="${IncPath}/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" type="text/css" href="${IncPath}/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" type="text/css" href="${IncPath}/assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
 <!-- END GLOBAL MANDATORY STYLES -->
+<!-- BEGIN GENERAL STYLES -->
+<link rel="stylesheet" type="text/css" href="${IncPath}/assets/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" type="text/css" href="${IncPath}/assets/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>
+<!-- END GENERAL STYLES -->
 <!-- BEGIN PAGE LEVEL STYLES -->
 <link rel="stylesheet" type="text/css" href="${IncPath}/assets/plugins/jstree/dist/themes/default/style.min.css"/>
 <link rel="stylesheet" type="text/css" href="${IncPath}/assets/plugins/select2/select2.css"/>
 <link rel="stylesheet" type="text/css" href="${IncPath}/assets/plugins/select2/select2-metronic.css"/>
 <!-- END PAGE LEVEL STYLES -->
 <!-- BEGIN THEME STYLES -->
-<link href="${IncPath}/assets/css/style-metronic.css" rel="stylesheet" type="text/css"/>
-<link href="${IncPath}/assets/css/style.css" rel="stylesheet" type="text/css"/>
-<link href="${IncPath}/assets/css/style-responsive.css" rel="stylesheet" type="text/css"/>
-<link href="${IncPath}/assets/css/plugins.css" rel="stylesheet" type="text/css"/>
-<link href="${IncPath}/assets/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color"/>
-<link href="${IncPath}/assets/css/custom.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" type="text/css" href="${IncPath}/assets/css/style-metronic.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" type="text/css" href="${IncPath}/assets/css/style.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" type="text/css" href="${IncPath}/assets/css/style-responsive.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" type="text/css" href="${IncPath}/assets/css/plugins.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" type="text/css" href="${IncPath}/assets/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color"/>
+<link rel="stylesheet" type="text/css" href="${IncPath}/assets/css/custom.css" rel="stylesheet" type="text/css"/>
 <!-- END THEME STYLES -->
 <link rel="shortcut icon" href="favicon.ico"/>
 </head>
@@ -49,6 +53,10 @@ License: You must have a valid license purchased only from themeforest(the above
 
 <div class="clearfix">
 </div>
+
+<!-- ajax -->
+<div id="modal_cl" class="modal fade" tabindex="-1"></div>
+
 <!-- BEGIN CONTAINER -->
 <div class="page-container">
 	
@@ -98,7 +106,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							</div>						
 						</div>
 						<div class="portlet-body">
-			           		<div id="resource_tree" class="tree-demo">
+			           		<div id="tree_cl" class="tree-demo">
 							</div>
 						</div>
 					</div>
@@ -112,7 +120,7 @@ License: You must have a valid license purchased only from themeforest(the above
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<form action="#" id="resource_form" class="form-horizontal">
+							<form action="#" id="form_cl" class="form-horizontal">
 								<div class="form-body">
 									<div class="form-group">
 										<label class="control-label col-md-3">名称
@@ -155,10 +163,10 @@ License: You must have a valid license purchased only from themeforest(the above
 								</div>
 								<div class="form-actions fluid">
 									<div class="col-md-offset-3 col-md-9">
-										<button type="submit" class="btn green" onclick="javascript:button='create';">增加</button>
-										<button type="submit" class="btn green" onclick="javascript:button='update';">修改</button>
-										<button type="button" class="btn green" onclick="removeMenuNode();">删除</button>
-										<button type="button" class="btn green" onclick="clearInputValue();">取消</button>
+										<button type="submit" class="btn blue" onclick="javascript:Cl.action='create';">增加</button>
+										<button type="submit" class="btn blue" onclick="javascript:Cl.action='update';">修改</button>
+										<button type="button" class="btn blue" onclick="javascript:Resource.remove();">删除</button>
+										<button type="button" class="btn blue" onclick="javascript:Resource.clear();">取消</button>
 									</div>
 								</div>
 							</form>
@@ -191,21 +199,27 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="${IncPath}/assets/plugins/jquery.cokie.min.js" type="text/javascript"></script>
 <script src="${IncPath}/assets/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
 <!-- END CORE PLUGINS -->
+<!-- BEGIN GENERAL PLUGINS -->
+<script src="${IncPath}/assets/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
+<script src="${IncPath}/assets/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>
+<script src="${IncPath}/assets/plugins/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="${IncPath}/assets/plugins/jquery-validation/dist/additional-methods.min.js"></script>
+<!-- END GENERAL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="${IncPath}/assets/plugins/jstree/dist/jstree.js"></script>
-<script type="text/javascript" src="${IncPath}/assets/plugins/jquery-validation/dist/jquery.validate.min.js"></script>
-<script type="text/javascript" src="${IncPath}/assets/plugins/jquery-validation/dist/additional-methods.min.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
-<script src="${BasePath}/scripts/custom/resource.js"></script>
 <script src="${IncPath}/assets/scripts/core/app.js"></script>
+<script src="${BasePath}/scripts/custom/cl.js"></script>
+<script src="${BasePath}/scripts/custom/resource.js"></script>
 <script>
-        jQuery(document).ready(function() {       
-           // initiate layout and plugins
-           App.init();
-           ResourceTree.init();
-           ResourceForm.init();
-        });
-    </script>
+    jQuery(document).ready(function() {       
+       // initiate layout and plugins
+       App.init();
+       Cl.initModal();
+       TreeCl.init();
+       FormCl.init();
+    });
+</script>
 <!-- END JAVASCRIPTS -->
 </body>
 <!-- END BODY -->

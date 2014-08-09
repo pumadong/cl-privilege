@@ -56,7 +56,17 @@ public class ResourceController {
 		//这是为了jstree插件使用，这个插件只对Content-Type为json和html的内容进行处理
 		response.setContentType("application/json;charset=UTF-8");
 	
-		return resourceService.getResourceTree();
+		return resourceService.getResourceTree(0);
+	}
+	
+	@ResponseBody
+	@RequestMapping("/getResourceTreeWithChecked")
+    public String getResourceTreeWithChecked(Integer roleId,HttpServletRequest request,HttpServletResponse response,ModelMap map) {
+
+		//这是为了jstree插件使用，这个插件只对Content-Type为json和html的内容进行处理
+		response.setContentType("application/json;charset=UTF-8");
+	
+		return resourceService.getResourceTree(roleId);
 	}
 	
 	@ResponseBody

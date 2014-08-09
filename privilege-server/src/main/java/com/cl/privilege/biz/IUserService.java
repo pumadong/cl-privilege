@@ -71,4 +71,17 @@ public interface IUserService {
 	 */
 	String assignRole(Integer id,String selectedStr);
 	
+	/**
+	 * 根据查询条件，返回DataTables控件需要的Json数据格式
+	 * @param searchModel
+	 * @return
+	 */
+	String getUserDataTables(UserSearchModel searchModel);
+	
+	/**
+	 * 返回DataTables控件需要的一行Json数据格式
+	 * @param id
+	 * @return
+	 */
+	String getUserDataRow(Integer id);
 }

@@ -2,9 +2,12 @@ package com.cl.privilege.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -1179,5 +1182,39 @@ public class StringUtil
       if (i >= array.length - 1) continue; str = str + joinChar;
     }
     return str;
+  }
+  
+  /**
+   * 对日期进行格式化
+   * @param d
+   * @param f
+   * @return
+   */
+  public static String formatDate(Date d,String f)
+  {
+	  SimpleDateFormat sdf = new SimpleDateFormat(f);
+	  return sdf.format(d);
+  }
+  
+  /**
+   * md5加密
+   * @param password
+   * @return
+   */
+  public static String makeMD5(String password) {   
+	  MessageDigest md;
+	  try {   
+		  // 生成一个MD5加密计算摘要   
+		  md = MessageDigest.getInstance("MD5");   
+		  // 计算md5函数   
+		  md.update(password.getBytes());
+		  // digest()最后确定返回md5 hash值，返回值为8为字符串。因为md5 hash值是16位的hex值，实际上就是8位的字符   
+		  // BigInteger函数则将8位的字符串转换成16位hex值，用字符串来表示；得到字符串形式的hash值
+		  String pwd = new BigInteger(1, md.digest()).toString(16);   
+		  return pwd;   
+	  } catch (Exception e) {   
+		  e.printStackTrace();   
+	  }
+	  return password;   
   }
 }

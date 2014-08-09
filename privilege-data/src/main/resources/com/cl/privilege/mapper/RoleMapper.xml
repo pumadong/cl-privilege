@@ -126,11 +126,11 @@
     	</trim>
     </sql>
     <sql id="orderby">
-    	order by r.update_date desc 
+    	order by r.id desc 
     </sql>
 	<delete id="deleteRoleById" parameterType="java.lang.Integer">
-		delete r,arm,arr 
-		from authority_role r 
+		delete r,prm,prr 
+		from p_role r 
 		left join p_role_module prm on r.id=prm.role_id
 		left join p_role_resource prr on r.id=prr.role_id
 		where r.id=#{id};

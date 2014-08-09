@@ -47,8 +47,7 @@ public interface IResourceService {
 	 * @param id
 	 * @return
 	 */
-	Integer deleteResourceById(Integer id);
-	
+	Integer deleteResourceById(Integer id);	
 	
 	/**
 	 * 根据资源id判断是否被角色使用
@@ -66,7 +65,8 @@ public interface IResourceService {
 	
 	/**
 	 * 获取菜单资源树
+	 * @param roleId 如果传入roleId，则对此roleId用户的相关模块和菜单资源选中
 	 * @return
 	 */
-	String getResourceTree();
+	String getResourceTree(Integer roleId);
 }

@@ -77,4 +77,25 @@ public interface IRoleService {
 	 * @return
 	 */
 	List<Role> getRoleList();
+	
+	/**
+	 * 根据查询条件，返回DataTables控件需要的Json数据格式
+	 * @param searchModel
+	 * @return
+	 */
+	String getRoleDataTables(RoleSearchModel searchModel);
+	
+	/**
+	 * 返回DataTables控件需要的一行Json数据格式
+	 * @param id
+	 * @return
+	 */
+	String getRoleDataRow(Integer id);
+	
+	/**
+	 * 返回jquery-multi-select需要的options数据
+	 * @param userId
+	 * @return
+	 */
+	String getRoleForOptions(Integer userId);
 }

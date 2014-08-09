@@ -84,9 +84,9 @@ INDEX `idx_username` (`username`) USING BTREE
 COMMENT='用户表'
 ;
 
-INSERT INTO `p_user` VALUES (1, 'root', '63a9f0ea7bb98050796b649e85481845', '管理员', 1, 1, 0, 0, 0, 'system', '2013-10-21 01:04:49', 'system', '2013-10-21 01:04:49');
-INSERT INTO `p_user` VALUES (2, 'cl', '63a9f0ea7bb98050796b649e85481845', '创力电子商务', 1, 0, 1, 0, 0, 'root', '2013-10-23 01:09:30', 'root', '2013-10-23 01:09:30');
-INSERT INTO `p_user` VALUES (3, 'test', '63a9f0ea7bb98050796b649e85481845', '创力测试', 1, 0, 2, 0, 1, 'root', '2013-10-21 01:06:08', 'root', '2013-10-21 01:06:08');
+INSERT INTO `p_user` VALUES (1, 'root', '63a9f0ea7bb98050796b649e85481845', '管理员', 1, 1, 0, 1, 0, 'system', '2013-10-21 01:04:49', 'system', '2013-10-21 01:04:49');
+INSERT INTO `p_user` VALUES (2, 'cl', '63a9f0ea7bb98050796b649e85481845', '创力电子商务', 1, 0, 1, 2, 0, 'root', '2013-10-23 01:09:30', 'root', '2013-10-23 01:09:30');
+INSERT INTO `p_user` VALUES (3, 'test', '63a9f0ea7bb98050796b649e85481845', '创力测试', 1, 0, 2, 3, 1, 'root', '2013-10-21 01:06:08', 'root', '2013-10-21 01:06:08');
 
 
 #角色表

@@ -210,7 +210,7 @@
 	    select 
 	    <include refid="Base_Column_List" />
 	    from p_resource re
-    	inner join authority_role_resource arr 
+    	inner join p_role_resource arr 
 		on re.id=arr.resource_id 
 		where arr.role_id=#{roleId} 
     </select>

@@ -20,6 +20,8 @@ public class User implements Serializable {
     private Boolean isAdmin;
 
     private Integer departmentId;
+    
+    private String departmentName;
 
     private Boolean isLock;
 
@@ -89,7 +91,15 @@ public class User implements Serializable {
         this.departmentId = departmentId;
     }
 
-    public Boolean getIsLock() {
+    public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
+
+	public Boolean getIsLock() {
         return isLock;
     }
 
