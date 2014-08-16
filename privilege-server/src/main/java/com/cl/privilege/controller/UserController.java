@@ -2,8 +2,6 @@ package com.cl.privilege.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -60,21 +58,21 @@ public class UserController {
 	
 	@ResponseBody
 	@RequestMapping("/getUserDataTables")
-    public String getUserDataTables(UserSearchModel searchModel,HttpServletResponse response,ModelMap map) {
+    public String getUserDataTables(UserSearchModel searchModel,ModelMap map) {
 		return userService.getUserDataTables(searchModel);
 	}
 	
 	@ResponseBody
 	@RequestMapping("/getUserDataRow")
 	public String  getUserDataRow(@RequestParam("id") Integer id) throws Exception{		
-		return userService.getUserDataRow(id);		
+		return userService.getUserDataRow(id);
 	}
 	
 	@ResponseBody
 	@RequestMapping("/get")
 	public String  get(@RequestParam("id") Integer id) throws Exception{		
 		User user = userService.getUserById(id);		
-		return JsonUtil.convertObj2json(user).toString();		
+		return JsonUtil.convertObj2json(user).toString();	
 	}
 	
 	@RequestMapping("/addform")
@@ -126,7 +124,7 @@ public class UserController {
 	
 		userService.updateUserById(user, operator);
 		
-		return ConstantUtil.Success;			
+		return ConstantUtil.Success;
 	}
 	
 	@ResponseBody
@@ -142,7 +140,7 @@ public class UserController {
 		
 		userService.updateUserById(user, operator);
 		
-		return ConstantUtil.Success;		
+		return ConstantUtil.Success;
 	}
 	
 	@ResponseBody
@@ -158,7 +156,7 @@ public class UserController {
 		
 		userService.updateUserById(user, operator);
 		
-		return ConstantUtil.Success;		
+		return ConstantUtil.Success;
 	}
 	
 	@ResponseBody
@@ -174,7 +172,7 @@ public class UserController {
 		
 		userService.updateUserById(user, operator);
 		
-		return ConstantUtil.Success;		
+		return ConstantUtil.Success;
 	}
 	
 	@RequestMapping("/assignform")

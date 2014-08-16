@@ -1,6 +1,7 @@
 package com.cl.privilege.controller;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -77,7 +78,9 @@ public class IndexController {
 		User newUser = new User();
 		newUser.setId(user.getId());
 		newUser.setPassword(StringUtil.makeMD5(password));
-		userService.updateUserById(newUser, user);
+		newUser.setUpdateDate(new Date());
+		newUser.setUpdatePerson(user.getUsername());
+		privilegeBaseApiService.updateUserById(newUser);
 		
 		//更新session
 		user.setPassword(newUser.getPassword());

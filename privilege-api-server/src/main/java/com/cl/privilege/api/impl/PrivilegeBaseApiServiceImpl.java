@@ -17,14 +17,12 @@ import com.cl.privilege.model.User;
 public class PrivilegeBaseApiServiceImpl implements IPrivilegeBaseApiService {
 
 	@Autowired
-	private UserMapper userMapper;
-	
+	private UserMapper userMapper;	
 	@Autowired
-	private ModuleMapper moduleMapper;
-	
+	private ModuleMapper moduleMapper;	
 	@Autowired
 	private ResourceMapper resourceMapper;
-	
+
 	@Override
 	public User getUserByUsername(String username) {
 		return userMapper.getUserByUsername(username);
@@ -89,6 +87,12 @@ public class PrivilegeBaseApiServiceImpl implements IPrivilegeBaseApiService {
 		}
 		
 		return sb.toString();
+	}
+	
+	@Override
+	public Integer updateUserById(User user)
+	{
+		return userMapper.updateByPrimaryKeySelective(user);
 	}
 	
 	/**

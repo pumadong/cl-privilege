@@ -74,7 +74,7 @@ public class ResourceController {
     public String get(Integer id,ModelMap map) {
 		
 		Resource resource = resourceService.getResourceById(id);
-		return JsonUtil.convertObj2json(resource).toString();		
+		return JsonUtil.convertObj2json(resource).toString();
 	}
 	
 	@ResponseBody
@@ -112,6 +112,6 @@ public class ResourceController {
 		
 		resourceService.deleteResourceById(id);
 		
-		return ConstantUtil.Success;		
+		return ConstantUtil.Success;
 	}
 }

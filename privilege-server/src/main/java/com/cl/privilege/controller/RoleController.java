@@ -1,8 +1,6 @@
 package com.cl.privilege.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -53,21 +51,21 @@ public class RoleController {
 	
 	@ResponseBody
 	@RequestMapping("/getRoleDataTables")
-    public String getRoleDataTables(RoleSearchModel searchModel,HttpServletResponse response,ModelMap map) {
+    public String getRoleDataTables(RoleSearchModel searchModel,ModelMap map) {
 		return roleService.getRoleDataTables(searchModel);
 	}
 	
 	@ResponseBody
 	@RequestMapping("/getRoleDataRow")
 	public String  getRoleDataRow(@RequestParam("id") Integer id) throws Exception{		
-		return roleService.getRoleDataRow(id);		
+		return roleService.getRoleDataRow(id);
 	}
 	
 	@ResponseBody
 	@RequestMapping("/get")
 	public String  get(@RequestParam("id") Integer id) throws Exception{		
 		Role role = roleService.getRoleById(id);		
-		return JsonUtil.convertObj2json(role).toString();		
+		return JsonUtil.convertObj2json(role).toString();	
 	}
 	
 	@RequestMapping("/addform")
@@ -119,7 +117,7 @@ public class RoleController {
 		
 		roleService.deleteRoleById(id);
 		
-		return ConstantUtil.Success;		
+		return ConstantUtil.Success;
 	}
 	
 	@RequestMapping("/assignform")

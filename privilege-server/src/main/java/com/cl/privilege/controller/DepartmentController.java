@@ -51,7 +51,7 @@ public class DepartmentController {
 	
 	@ResponseBody
 	@RequestMapping("/getDepartmentTree")
-    public String getDepartmentTree(HttpServletRequest request,HttpServletResponse response,ModelMap map) {
+    public String getDepartmentTree(HttpServletResponse response,ModelMap map) {
 
 		//这是为了jstree插件使用，这个插件只对Content-Type为json和html的内容进行处理		
 		response.setContentType("application/json;charset=UTF-8");
@@ -64,7 +64,7 @@ public class DepartmentController {
     public String get(Integer id,ModelMap map) {
 		
 		Department department = departmentService.getDepartmentById(id);		
-		return JsonUtil.convertObj2json(department).toString();		
+		return JsonUtil.convertObj2json(department).toString();
 	}
 	
 	@ResponseBody
@@ -102,6 +102,6 @@ public class DepartmentController {
 		
 		departmentService.deleteDepartmentById(id);
 		
-		return ConstantUtil.Success;		
+		return ConstantUtil.Success;
 	}
 }
