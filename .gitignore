@@ -37,3 +37,4 @@ target
 Thumbs.db
 
 *.log
+*.out
