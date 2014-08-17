@@ -53,7 +53,7 @@
 	
 	<!-- 通过BeanFactoryAware，手动从spring容器获取bean -->
 	<!-- 已经在applicationContext.xml中定义了，这里就不用定义了 -->
-	<!-- <bean class="com.shopyp.common.utils.SpringContextHolder"/> -->
+	<!-- <bean class="com.cl.privilege.utils.SpringContextHolder"/> -->
 </beans>
 
 

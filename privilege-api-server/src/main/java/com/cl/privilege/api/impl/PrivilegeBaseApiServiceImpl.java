@@ -82,7 +82,7 @@ public class PrivilegeBaseApiServiceImpl implements IPrivilegeBaseApiService {
 			sb.append("<span class=\"selected\"></span>");
 			sb.append("<span class=\"arrow open\"></span>");
 			sb.append("</a>");
-			sb.append(buildResourceTree(m,resourceList,"s",visitedResource,visitedModule));
+			sb.append(buildResourceTree(m,resourceList,"s",visitedResource));
 			sb.append("</li>");
 		}
 		
@@ -101,10 +101,9 @@ public class PrivilegeBaseApiServiceImpl implements IPrivilegeBaseApiService {
 	 * @param resourceList：所有的资源列表
 	 * @param structure：要对其进行树形结构的资源，根是s
 	 * @param visitedStructure：当前访问页面的Structure
-	 * @param moduleFlag：当前访问页面所属的模块
 	 * @return
 	 */
-	private String buildResourceTree(Module m,List<Resource> resourceList,String structure,String visitedResource,String visitedModule)
+	private String buildResourceTree(Module m,List<Resource> resourceList,String structure,String visitedResource)
 	{
 		if(resourceList == null || resourceList.size()==0)
 		{
@@ -132,7 +131,7 @@ public class PrivilegeBaseApiServiceImpl implements IPrivilegeBaseApiService {
 		for(Resource r:sonList)
 		{
 			//递归，找子级的树形结构
-			String s = buildResourceTree(m,resourceList,r.getStructure(),visitedResource,visitedModule);
+			String s = buildResourceTree(m,resourceList,r.getStructure(),visitedResource);
 			if(visitedResource.contains(r.getStructure()))
 			{
 				sb.append("<li class=\"active\">");
@@ -144,7 +143,7 @@ public class PrivilegeBaseApiServiceImpl implements IPrivilegeBaseApiService {
 				sb.append("<a href=\"")
 					.append(r.getUrl())
 					.append("?visitedModule=")
-					.append(visitedModule)
+					.append(r.getModuleFlag())
 					.append("&visitedResource=")
 					.append(r.getStructure())
 					.append("\">")
