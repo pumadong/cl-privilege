@@ -28,7 +28,7 @@ COMMENT='系统模块表'
 
 INSERT INTO `p_module`(id,name,flag,url,sort_no,create_person,create_date,update_person,update_date) 
 VALUES
-(1,'配置中心','p','/privilege-server/controller/main.do?moduleFlag=p',10,'system',NOW(),'system',NOW())
+(1,'配置中心','p','http://localhost:10002/privilege-server',10,'system',NOW(),'system',NOW())
 ;
 
 
@@ -56,10 +56,10 @@ COMMENT='权限资源表'
 
 INSERT INTO `p_resource`(id,name,url,remark,parent_id,structure,sort_no,module_flag,create_person,create_date,update_person,update_date) 
 VALUES
-(1,'部门管理','/privilege-server/controller/department/list.do','',0,'s-1',1,'p','system',NOW(),'system',NOW()),
-(2,'权限管理','/privilege-server/controller/resource/list.do','',0,'s-2',2,'p','system',NOW(),'system',NOW()),
-(3,'角色管理','/privilege-server/controller/role/list.do','',0,'s-3',3,'p','system',NOW(),'system',NOW()),
-(4,'帐户管理','/privilege-server/controller/user/list.do','',0,'s-4',4,'p','system',NOW(),'system',NOW())
+(1,'部门管理','/controller/department/list.do','',0,'s-1',1,'p','system',NOW(),'system',NOW()),
+(2,'权限管理','/controller/resource/list.do','',0,'s-2',2,'p','system',NOW(),'system',NOW()),
+(3,'角色管理','/controller/role/list.do','',0,'s-3',3,'p','system',NOW(),'system',NOW()),
+(4,'帐户管理','/controller/user/list.do','',0,'s-4',4,'p','system',NOW(),'system',NOW())
 ;
 
 #用户表

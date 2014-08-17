@@ -141,6 +141,7 @@ public class PrivilegeBaseApiServiceImpl implements IPrivilegeBaseApiService {
 			if(s.equals(""))
 			{
 				sb.append("<a href=\"")
+					.append(m.getUrl())
 					.append(r.getUrl())
 					.append("?visitedModule=")
 					.append(r.getModuleFlag())
