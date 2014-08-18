@@ -82,7 +82,7 @@ public class PrivilegeBaseApiServiceImpl implements IPrivilegeBaseApiService {
 			sb.append("<span class=\"selected\"></span>");
 			sb.append("<span class=\"arrow open\"></span>");
 			sb.append("</a>");
-			sb.append(buildResourceTree(m,resourceList,"s",visitedResource));
+			sb.append(buildResourceTree(m,resourceList,"s",visitedModule,visitedResource));
 			sb.append("</li>");
 		}
 		
@@ -96,14 +96,15 @@ public class PrivilegeBaseApiServiceImpl implements IPrivilegeBaseApiService {
 	}
 	
 	/**
-	 * 对某个模块下面的所有资源建立资源分类树
+	 * 
 	 * @param m：当前正在遍历的模块
 	 * @param resourceList：所有的资源列表
 	 * @param structure：要对其进行树形结构的资源，根是s
-	 * @param visitedStructure：当前访问页面的Structure
+	 * @param visitedModule：当前访问页面的Module
+	 * @param visitedResource：当前访问页面的Resource
 	 * @return
 	 */
-	private String buildResourceTree(Module m,List<Resource> resourceList,String structure,String visitedResource)
+	private String buildResourceTree(Module m,List<Resource> resourceList,String structure,String visitedModule,String visitedResource)
 	{
 		if(resourceList == null || resourceList.size()==0)
 		{
@@ -131,8 +132,8 @@ public class PrivilegeBaseApiServiceImpl implements IPrivilegeBaseApiService {
 		for(Resource r:sonList)
 		{
 			//递归，找子级的树形结构
-			String s = buildResourceTree(m,resourceList,r.getStructure(),visitedResource);
-			if(visitedResource.contains(r.getStructure()))
+			String s = buildResourceTree(m,resourceList,r.getStructure(),visitedModule,visitedResource);
+			if(visitedResource.contains(r.getStructure()) && r.getModuleFlag().equals(visitedModule))
 			{
 				sb.append("<li class=\"active\">");
 			} else {
