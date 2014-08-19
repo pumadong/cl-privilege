@@ -96,7 +96,7 @@ License: You must have a valid license purchased only from themeforest(the above
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
 				<div class="col-md-6">
-					<div class="portlet blue box">
+					<div class="portlet grey box">
 						<div class="portlet-title">
 							<div class="caption">
 								部门树
@@ -109,7 +109,7 @@ License: You must have a valid license purchased only from themeforest(the above
 					</div>
 				</div>
 				<div class="col-md-6">
-					<div class="portlet blue box">
+					<div class="portlet grey box">
 						<div class="portlet-title">
 							<div class="caption">
 								部门管理
