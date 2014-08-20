@@ -28,7 +28,7 @@ COMMENT='系统模块表'
 
 INSERT INTO `p_module`(id,name,flag,url,sort_no,create_person,create_date,update_person,update_date) 
 VALUES
-(1,'配置中心','p','http://localhost:10002/privilege-server',10,'system',NOW(),'system',NOW())
+(1,'配置中心','p','http://127.0.0.1:10002/privilege-server',10,'system',NOW(),'system',NOW())
 ;
 
 

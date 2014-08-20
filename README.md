@@ -62,6 +62,8 @@ DataTables	:	http://datatables.net/
 
 Bootstram Modals	:	http://www.w3cschool.cc/bootstrap/bootstrap-v2-modal-plugin.html
 
+注意，在这个插件的使用过程中，用了Ajax，是不能跨域的，即使从localhost，调用127.0.0.1的页面也是不行的。
+
 colorbox	:	http://www.jacklmoore.com/colorbox/，用于弹出窗体，本系统使用的是MetroNic模板本身提供的模式(Bootstrap Modals)对话框，colorbox也是一种选择，这两种弹窗插件都比较好。
 
 jquery-multi-select		：		http://loudev.com/
