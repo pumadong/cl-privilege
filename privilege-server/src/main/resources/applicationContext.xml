@@ -113,7 +113,7 @@
     <beans profile="dev">
 	    <bean id="dataSourcePrivilegeCorba" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 	        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-		    <property name="url" value="jdbc:mysql://localhost:3306/privilege?characterEncoding=utf-8"/>
+		    <property name="url" value="jdbc:mysql://localhost:3306/privilege?useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true"/>
 		    <property name="username" value="root"/>
 		    <property name="password" value="123456"/>
 	    </bean>

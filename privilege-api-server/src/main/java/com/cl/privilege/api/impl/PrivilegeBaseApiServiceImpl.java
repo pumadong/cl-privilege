@@ -159,7 +159,7 @@ public class PrivilegeBaseApiServiceImpl implements IPrivilegeBaseApiService {
 				sb.append("<a href=\"javascript:;\">");
 				sb.append("<i class=\"fa fa-folder \"></i>&nbsp;&nbsp;");
 				sb.append(r.getName());
-				if(visitedResource.contains(r.getStructure()))
+				if(visitedResource.contains(r.getStructure()) && r.getModuleFlag().equals(visitedModule))
 				{
 					sb.append("<span class=\"arrow open\"></span>");	
 				} else {
