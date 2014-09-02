@@ -13,7 +13,7 @@ import com.cl.privilege.model.Module;
 import com.cl.privilege.model.Resource;
 import com.cl.privilege.model.User;
 
-//注意：这个类不需要再加@service标签了，因为在dubbo里面已经定义了
+//注意：这个类不需要再加@Service标签了，因为在DUBBO里面已经定义了
 public class PrivilegeBaseApiServiceImpl implements IPrivilegeBaseApiService {
 
 	@Autowired

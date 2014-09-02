@@ -122,6 +122,13 @@
             <groupId>com.caucho</groupId>
             <artifactId>hessian</artifactId>
             <version>4.0.7</version>
-        </dependency>             
+        </dependency>
+        <!-- 开发阶段使用，生产环节容器提供 -->
+        <dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>test</scope>
+			<version>5.1.14</version>
+		</dependency>
 	 </dependencies>      
 </project>
