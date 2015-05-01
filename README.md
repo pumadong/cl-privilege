@@ -84,4 +84,4 @@ b.把权限号告知使用者，使用者根据此权限号，在程序中增加
 
 在datatable.js中，对fnServerData段进行调整，用于向服务器端传递分页、查询等参数，同时也调整显示的提示文本内容。
 
-jqueyr.validate.js和jquery.validte.min.js中，调整提示文本显示。
+jqueyr.validate.js和jquery.validte.min.js中，调整提示文本显示。。
